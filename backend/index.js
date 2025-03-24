@@ -28,7 +28,7 @@ app.get("/api/scrape", async (req, res) => {
 
         const products = []
 
-        document.querySelectorAll(".s-result-item").forEach((item) => { //looping through each product sought
+        document.querySelectorAll(".s-result-item").forEach((item) => { //looping/maping through each product sought
             const title = item.querySelector("h2 span")?.textContent || "No title" //getting the title of product
             const rating = item.querySelector(".a-icon-alt")?.textContent.match(/[\d.]+/)?.[0] || "No rating" //getting the rating of product
             const reviews = item.querySelector(".s-link-style .s-underline-text")?.textContent.replace(/\D/g, "") || "0" //getting the number of reviews
@@ -37,7 +37,8 @@ app.get("/api/scrape", async (req, res) => {
             if (title !== "No title") {     //pushing the product only if it has a title (if the product exists, he haves a title)
                 products.push({ title, rating, reviews, image })
             }
-        });
+
+        })
 
         res.json({ keyword, products }) //returning the products
     } catch (error) {
