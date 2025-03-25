@@ -1,10 +1,11 @@
+//interface for the products
 interface Products {
     image: string,
     title: string,
     rating: string,
     reviews: string
 }
-
+//interface for the products LIST
 interface ProductListProps{
     products : Products[]
 }
