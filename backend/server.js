@@ -1,10 +1,10 @@
 /* --------------------------------- IMPORTS -------------------------------- */
-const express = require("express");
-const axios = require("axios");
-const { JSDOM } = require("jsdom");
+const express = require("express")
+const axios = require("axios")
+const { JSDOM } = require("jsdom")
 
-const app = express();
-const PORT = 3000;
+const app = express()
+const PORT = 4000
 
 /* ------------------------------- GET METHOD ------------------------------- */
 app.get("/api/scrape", async (req, res) => {
@@ -17,18 +17,18 @@ app.get("/api/scrape", async (req, res) => {
         const url = `https://www.amazon.com/s?k=${encodeURIComponent(keyword)}` //url with keyword search on amazon
         const { data } = await axios.get(url, {
             headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0 Win64 x64)",
                  //passing a User-Agent header to prevent Amazon from blocking the request
             },
         })
 
         /* -------------------------------- SCRAPPING ------------------------------- */
-        const dom = new JSDOM(data)
+        const dom = new JSDOM(data) //import data of the DOM to use JSDOM
         const document = dom.window.document
 
-        const products = []
+        const products = [] //array to store the products
 
-        document.querySelectorAll(".s-result-item").forEach((item) => { //looping/maping through each product sought
+        document.querySelectorAll(".s-result-item").forEach((item) => { //looping through each product sought
             const title = item.querySelector("h2 span")?.textContent || "No title" //getting the title of product
             const rating = item.querySelector(".a-icon-alt")?.textContent.match(/[\d.]+/)?.[0] || "No rating" //getting the rating of product
             const reviews = item.querySelector(".s-link-style .s-underline-text")?.textContent.replace(/\D/g, "") || "0" //getting the number of reviews
@@ -37,15 +37,14 @@ app.get("/api/scrape", async (req, res) => {
             if (title !== "No title") {     //pushing the product only if it has a title (if the product exists, he haves a title)
                 products.push({ title, rating, reviews, image })
             }
-
         })
 
         res.json({ keyword, products }) //returning the products
     } catch (error) {
         res.status(500).json({ error: "Failed search products", details: error.message }) //returning the error
     }
-});
+})
 
 app.listen(PORT, () => {
     console.log(`Running at http://localhost:${PORT}`)
-});
+})
