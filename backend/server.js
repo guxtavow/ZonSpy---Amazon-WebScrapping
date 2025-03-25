@@ -18,7 +18,7 @@ app.get("/api/scrape", async (req, res) => {
         const { data } = await axios.get(url, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0 Win64 x64)",
-                 
+                 //passing a User-Agent header to prevent Amazon from blocking the request
             },
         })
 
