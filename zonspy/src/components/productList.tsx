@@ -1,4 +1,5 @@
 //interface for the products
+//interface for the products
 interface Products {
     image: string,
     title: string,
